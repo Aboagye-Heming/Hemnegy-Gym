@@ -3,16 +3,27 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
 
 const SearchExercises = () => {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
+  const [exercises, setexercises] = useState([]);
 
   const handleSearch = async () => {
-    if(search){
-      const exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercises", exerciseOptions);
+    if (search) {
+      const exercisesData = await fetchData(
+        "https://exercisedb.p.rapidapi.com/exercises",
+        exerciseOptions
+      );
 
-      console.log(exercisesData)
-     }
-
-  }
+      const searchedExercises = exercisesData.filter(
+        (exercise) =>
+          exercise.name.toLowerCase().includes(search) ||
+          exercise.target.toLowerCase.includes(search) ||
+          exercise.equipment.toLowerCase.includes(search) ||
+          exercise.bodyPart.toLowerCase.includes(search)
+      );
+      setSearch('');
+      setexercises(searchedExercises)
+    }
+  };
 
   return (
     <div>
@@ -52,10 +63,12 @@ const SearchExercises = () => {
               fontSize: { lg: "20px", xs: "14px" },
               height: "56px",
               position: "absolute",
-              right: "0"
+              right: "0",
             }}
             onClick={handleSearch}
-          >Search</Button>
+          >
+            Search
+          </Button>
         </Box>
       </Stack>
     </div>
